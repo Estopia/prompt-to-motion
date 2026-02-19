@@ -13,9 +13,10 @@ import {
 } from "../../../../../config.mjs";
 import { COMP_NAME } from "../../../../../types/constants";
 import { RenderRequest } from "../../../../../types/schema";
+import { requireAuth } from "../../../../lib/auth";
 import { executeApi } from "../../../../helpers/api-response";
 
-export const POST = executeApi<RenderMediaOnLambdaOutput, typeof RenderRequest>(
+const handler = executeApi<RenderMediaOnLambdaOutput, typeof RenderRequest>(
   RenderRequest,
   async (req, body) => {
     if (
@@ -56,3 +57,13 @@ export const POST = executeApi<RenderMediaOnLambdaOutput, typeof RenderRequest>(
     return result;
   },
 );
+
+export async function POST(req: Request) {
+  try {
+    await requireAuth();
+  } catch (err) {
+    if (err instanceof Response) return err;
+    throw err;
+  }
+  return handler(req);
+}

@@ -5,9 +5,10 @@ import {
 } from "@remotion/lambda/client";
 import { DISK, RAM, REGION, TIMEOUT } from "../../../../../config.mjs";
 import { ProgressRequest, ProgressResponse } from "../../../../../types/schema";
+import { requireAuth } from "../../../../lib/auth";
 import { executeApi } from "../../../../helpers/api-response";
 
-export const POST = executeApi<ProgressResponse, typeof ProgressRequest>(
+const handler = executeApi<ProgressResponse, typeof ProgressRequest>(
   ProgressRequest,
   async (req, body) => {
     const renderProgress = await getRenderProgress({
@@ -42,3 +43,13 @@ export const POST = executeApi<ProgressResponse, typeof ProgressRequest>(
     };
   },
 );
+
+export async function POST(req: Request) {
+  try {
+    await requireAuth();
+  } catch (err) {
+    if (err instanceof Response) return err;
+    throw err;
+  }
+  return handler(req);
+}

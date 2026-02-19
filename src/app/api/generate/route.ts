@@ -1,3 +1,4 @@
+import { requireAuth } from "@/lib/auth";
 import {
   getCombinedSkillContent,
   SKILL_DETECTION_PROMPT,
@@ -295,6 +296,13 @@ interface GenerateResponse {
 }
 
 export async function POST(req: Request) {
+  try {
+    await requireAuth();
+  } catch (err) {
+    if (err instanceof Response) return err;
+    throw err;
+  }
+
   const {
     prompt,
     model = "gpt-5.2",
