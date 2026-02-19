@@ -13,12 +13,15 @@ import {
 } from "../../../../../config.mjs";
 import { COMP_NAME } from "../../../../../types/constants";
 import { RenderRequest } from "../../../../../types/schema";
-import { requireAuth } from "../../../../lib/auth";
+import { getCurrentUser, requireAuth } from "../../../../lib/auth";
+import { checkQuota, recordUsage } from "../../../../lib/quota";
 import { executeApi } from "../../../../helpers/api-response";
 
 const handler = executeApi<RenderMediaOnLambdaOutput, typeof RenderRequest>(
   RenderRequest,
   async (req, body) => {
+    const user = await getCurrentUser();
+
     if (
       !process.env.AWS_ACCESS_KEY_ID &&
       !process.env.REMOTION_AWS_ACCESS_KEY_ID
@@ -54,16 +57,28 @@ const handler = executeApi<RenderMediaOnLambdaOutput, typeof RenderRequest>(
       },
     });
 
+    if (user) {
+      void recordUsage(user.id, "render", { composition: body.inputProps });
+    }
     return result;
   },
 );
 
 export async function POST(req: Request) {
+  let user: Awaited<ReturnType<typeof requireAuth>>;
   try {
-    await requireAuth();
+    user = await requireAuth();
   } catch (err) {
     if (err instanceof Response) return err;
     throw err;
+  }
+  if (user) {
+    try {
+      await checkQuota(user.id, "render");
+    } catch (err) {
+      if (err instanceof Response) return err;
+      throw err;
+    }
   }
   return handler(req);
 }

@@ -1,5 +1,4 @@
 import { createClient } from "@supabase/supabase-js";
-import type { Database } from "@/lib/db/types";
 
 /**
  * Server-only Supabase client with service role.
@@ -14,7 +13,7 @@ export function createServiceRoleClient() {
       "Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY"
     );
   }
-  return createClient<Database>(url, serviceRoleKey, {
+  return createClient(url, serviceRoleKey, {
     auth: { persistSession: false },
   });
 }

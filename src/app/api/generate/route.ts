@@ -1,4 +1,5 @@
 import { requireAuth } from "@/lib/auth";
+import { checkQuota, recordUsage } from "@/lib/quota";
 import {
   getCombinedSkillContent,
   SKILL_DETECTION_PROMPT,
@@ -296,11 +297,22 @@ interface GenerateResponse {
 }
 
 export async function POST(req: Request) {
+  let userId: string | null = null;
   try {
-    await requireAuth();
+    const user = await requireAuth();
+    userId = user?.id ?? null;
   } catch (err) {
     if (err instanceof Response) return err;
     throw err;
+  }
+
+  if (userId) {
+    try {
+      await checkQuota(userId, "generation");
+    } catch (err) {
+      if (err instanceof Response) return err;
+      throw err;
+    }
   }
 
   const {
@@ -564,6 +576,10 @@ Analyze the request and decide: use targeted edits (type: "edit") for small chan
         );
       }
 
+      if (userId) {
+        void recordUsage(userId, "generation", { model: modelName, editType: "follow_up" });
+      }
+
       // Return the result with metadata
       const responseData: GenerateResponse = {
         code: finalCode,
@@ -643,6 +659,10 @@ Analyze the request and decide: use targeted edits (type: "edit") for small chan
       reasoningEffort ? `reasoning_effort: ${reasoningEffort}` : "",
       hasImages ? `(with ${frameImages.length} image(s))` : "",
     );
+
+    if (userId) {
+      void recordUsage(userId, "generation", { model: modelName });
+    }
 
     // Get the original stream response
     const originalResponse = result.toUIMessageStreamResponse({
