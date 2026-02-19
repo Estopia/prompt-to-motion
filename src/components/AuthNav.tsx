@@ -65,6 +65,11 @@ export function AuthNav() {
           Dashboard
         </Button>
       </Link>
+      <Link href="/account">
+        <Button variant="ghost" size="sm">
+          Account
+        </Button>
+      </Link>
       <Button variant="outline" size="sm" onClick={handleSignOut}>
         Sign out
       </Button>

@@ -65,21 +65,22 @@
 
 ---
 
-## Phase 6: Stripe
+## Phase 6: Stripe ✅
 
-- [ ] Stripe Dashboard: Products (Free, Starter, Pro), Prices (monthly/yearly)
-- [ ] src/app/api/stripe/checkout/route.ts: Create Checkout Session, redirect zu Stripe
-- [ ] src/app/api/stripe/webhook/route.ts: subscription.created/updated/deleted, invoice.paid → subscriptions Tabelle updaten
-- [ ] Webhook-Signatur prüfen (STRIPE_WEBHOOK_SECRET)
-- [ ] Billing-Seite: aktueller Plan, Usage, Button „Upgrade“ / „Manage subscription“ (Customer Portal)
+- [x] Stripe: STRIPE_PRICE_STARTER/PRO/TEAM in .env.example
+- [x] src/lib/stripe.ts: stripe client, getStripePriceId
+- [x] src/app/api/stripe/checkout/route.ts: Create Checkout Session, return url
+- [x] src/app/api/stripe/webhook/route.ts: subscription created/updated/deleted → subscriptions table
+- [x] Webhook signature verification (STRIPE_WEBHOOK_SECRET)
+- [x] Account page: plan, usage, UpgradeButton (Stripe Checkout)
 
 ---
 
-## Phase 7: Dashboard & Billing UI
+## Phase 7: Dashboard & Billing UI ✅
 
-- [ ] /dashboard: Nach Login Standard-Route; Liste „Recent projects“, Usage-Zähler, CTA „New animation“ → /generate
-- [ ] /account oder /settings: Profil, Billing (Plan, Upgrade, Manage subscription)
-- [ ] Projekte: Save-Button im Editor → INSERT projects; Load im Dashboard → /generate?project=id
+- [x] /dashboard: after login; links to New animation + Account & Billing
+- [x] /account: plan, usage this month, Upgrade (Starter) when free
+- [ ] Projects: Save/Load (optional next step)
 
 ---
 

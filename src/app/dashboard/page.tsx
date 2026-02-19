@@ -16,9 +16,14 @@ export default async function DashboardPage() {
         <p className="mt-2 text-secondary-foreground">
           Welcome back. Your usage and saved projects will appear here.
         </p>
-        <Link href="/generate" className="inline-block mt-6">
-          <Button>New animation</Button>
-        </Link>
+        <div className="flex gap-4 mt-6">
+          <Link href="/generate">
+            <Button>New animation</Button>
+          </Link>
+          <Link href="/account">
+            <Button variant="outline">Account & Billing</Button>
+          </Link>
+        </div>
       </div>
     </PageLayout>
   );
