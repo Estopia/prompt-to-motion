@@ -1,12 +1,12 @@
 {
-  "name": "template-prompt-to-motion-graphics",
-  "version": "4.0.379",
-  "description": "SaaS template for AI-powered code generation with Remotion",
+  "name": "motionforge",
+  "version": "1.0.0",
+  "description": "MotionForge - AI-powered motion graphics from prompts",
   "private": true,
   "repository": {
     "url": "https://github.com/remotion-dev/remotion/tree/main/packages/template-prompt-to-motion-graphics"
   },
-  "homepage": "https://www.remotion.dev",
+  "homepage": "https://motionforge.app",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -51,7 +51,10 @@
     "remotion": "^4.0.0",
     "tailwind-merge": "3.4.0",
     "three": "0.178.0",
-    "zod": "4.1.13"
+    "zod": "4.1.13",
+    "@supabase/supabase-js": "^2.47.0",
+    "@supabase/ssr": "^0.5.0",
+    "stripe": "^17.4.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.1.0",

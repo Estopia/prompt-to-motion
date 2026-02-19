@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
+import { SITE_NAME } from "@/lib/site";
 
 interface HeaderProps {
   asLink?: boolean;
@@ -10,14 +11,12 @@ export function Header({ asLink = false }: HeaderProps) {
     <div className="flex items-center gap-3">
       <img
         src="/logo-white.svg"
-        alt="Remotion"
+        alt={SITE_NAME}
         style={{
           width: 32,
         }}
       />
-      <span className="text-xl font-bold text-white font-sans">
-        Remotion - Prompt to Motion Graphics
-      </span>
+      <span className="text-xl font-bold text-white font-sans">{SITE_NAME}</span>
     </div>
   );
 
