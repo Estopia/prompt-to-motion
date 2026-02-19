@@ -1,5 +1,6 @@
 "use client";
 
+import { AuthNav } from "./AuthNav";
 import { Header } from "./Header";
 
 interface PageLayoutProps {
@@ -17,7 +18,10 @@ export function PageLayout({
     <div className="h-screen w-screen bg-background flex flex-col">
       <header className="flex justify-between items-start py-8 px-12 shrink-0">
         <Header asLink={showLogoAsLink} />
-        {rightContent}
+        <div className="flex items-center gap-4">
+          {rightContent}
+          <AuthNav />
+        </div>
       </header>
       {children}
     </div>
